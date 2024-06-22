@@ -1,30 +1,70 @@
-# React + TypeScript + Vite
+# TopSpotter
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+[![TopSpotter Logo](Logo.png)](https://top-spotter.netlify.app/)
 
-Currently, two official plugins are available:
+**TopSpotter** is a single-page application built with React that leverages Spotify’s RESTful API, enabling users to explore their most frequently played tracks over various time periods and create playlists.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Getting Started
 
-## Expanding the ESLint configuration
+### Live Demo
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+Check out the live version of the app [here](https://top-spotter.netlify.app/).
 
-- Configure the top-level `parserOptions` property like this:
+### Installation
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
+To run the app locally, follow these steps:
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+1. **Clone the repository:**
+
+   ```bash
+   git clone https://github.com/S-Sajith/top-spotter.git
+   cd top-spotter
+   ```
+
+2. **Install dependencies:**
+
+   ```bash
+   npm install
+   ```
+
+3. **Start the development server:**
+
+   ```bash
+   npm run dev
+   ```
+
+4. Open your browser and navigate to `http://localhost:5173/` to see the app in action.
+
+## Usage
+
+1. **Login**
+
+   - Click on login button, enter your username and password.
+   - Provide permission to access you top tracks data.
+
+2. **Select time period:**
+
+   - Select time frame out of the three options - last month, last 6 months or all time.
+
+3. **Create Playlist:**
+   - View the playlist, preview tracks if needed.
+   - Click on create playlist button and the created playlist will appear in your spotify account.
+
+## Technologies Used
+
+- **React**: A JavaScript library for building user interfaces.
+- **Spotify API**: An API provided by Spotify that allows developers to access and integrate Spotify's music data and functionality into their applications.
+- **Tailwind CSS**: A utility-first CSS framework for rapidly building custom user interfaces with a focus on simplicity and scalability.
+
+## Developer
+
+**Sajith S**  
+GitHub: [S-Sajith](https://github.com/S-Sajith)
+
+## Contributing
+
+Contributions are welcome! If you have any suggestions or improvements, please create an issue or submit a pull request.
+
+---
+
+For any inquiries or support, feel free to contact me via GitHub.
