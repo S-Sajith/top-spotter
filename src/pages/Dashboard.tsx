@@ -9,8 +9,13 @@ import { useNavigate } from "react-router-dom";
 interface Track {
   id: string;
   name: string;
-  artists: { name: string }[];
+  artists: { name: string; id: string; external_urls: { spotify: string } }[];
   uri: string;
+  album: {
+    images: { url: string }[];
+  };
+  preview_url?: string;
+  duration_ms: number;
 }
 
 const Dashboard: React.FC = () => {
@@ -21,6 +26,7 @@ const Dashboard: React.FC = () => {
       navigate("/createPlaylists");
     }
   }, []);
+
   const [topTracks, setTopTracks] = useState<Track[]>([]);
   const [timeRange, setTimeRange] = useState("short_term");
   const [userId, setUserId] = useState<string>("");
@@ -55,30 +61,176 @@ const Dashboard: React.FC = () => {
     alert(`Playlist created! ID: ${playlistId}`);
   };
 
+  const [playingTrackId, setPlayingTrackId] = useState<string | null>(null);
+  const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    // Initialize audio element
+    if (!audio) {
+      const newAudio = new Audio();
+      setAudio(newAudio);
+    }
+
+    return () => {
+      // Clean up audio element on component unmount
+      if (audio) {
+        audio.pause();
+        audio.src = "";
+        setAudio(null);
+      }
+    };
+  }, [audio]);
+
+  const handlePlayPause = (trackId: string, previewUrl: string) => {
+    if (!audio) return;
+
+    if (playingTrackId === trackId) {
+      // Pause
+      audio.pause();
+      setPlayingTrackId(null);
+    } else {
+      // Play
+      audio.src = previewUrl;
+      audio.play();
+      setPlayingTrackId(trackId);
+    }
+  };
+
+  function formatDuration(ms: number) {
+    const minutes = Math.floor(ms / 60000);
+    const seconds = ((ms % 60000) / 1000).toFixed(0);
+    return `${minutes}:${parseInt(seconds) < 10 ? "0" : ""}${seconds}`;
+  }
+
   return (
-    <div className="p-4 h-full">
-      <h1 className="text-2xl font-bold mb-4">Your Top Tracks</h1>
-      <div className="mb-4">
-        <select
-          onChange={(e) => setTimeRange(e.target.value)}
-          value={timeRange}
-        >
-          <option value="short_term">Last Month</option>
-          <option value="medium_term">Last 6 Months</option>
-          <option value="long_term">All Time</option>
-        </select>
+    <div className="p-4 relative h-full">
+      <div className="flex flex-col items-start mb-4 md:flex-row md:justify-between">
+        <h1 className="text-2xl font-bold text-white">Your Top Tracks</h1>
+        <div className="flex mt-3 md:mt-0">
+          <button
+            className="bg-greyBg text-white p-2 rounded-full mr-2 text-xs"
+            onClick={() => setTimeRange("short_term")}
+            style={{
+              backgroundColor: timeRange === "short_term" ? "#1db954" : "",
+            }}
+          >
+            LAST MONTH
+          </button>
+          <button
+            className="bg-greyBg text-white p-2 rounded-full mr-2 text-xs"
+            onClick={() => setTimeRange("medium_term")}
+            style={{
+              backgroundColor: timeRange === "medium_term" ? "#1db954" : "",
+            }}
+          >
+            LAST 6 MONTHS
+          </button>
+          <button
+            className="bg-greyBg text-white p-2 rounded-full text-xs"
+            onClick={() => setTimeRange("long_term")}
+            style={{
+              backgroundColor: timeRange === "long_term" ? "#1db954" : "",
+            }}
+          >
+            ALL TIME
+          </button>
+        </div>
       </div>
-      <ul>
+      <ul
+        className="max-h-[70vh] overflow-y-auto divide-y divide-gray-300"
+        style={{ scrollbarWidth: "thin", msOverflowStyle: "none" }}
+      >
+        <style>
+          {`
+            ul::-webkit-scrollbar {
+              width: 7px; /* Thinner width for webkit browsers */
+            }
+
+            ul::-webkit-scrollbar-track {
+              background: #2d2d2d; /* Darker background color */
+            }
+
+            ul::-webkit-scrollbar-thumb {
+              background-color: #555; /* Darker thumb color */
+              border-radius: 10px;
+              border: 2px solid #2d2d2d; /* Matches track color */
+            }
+          `}
+        </style>
         {topTracks.map((track) => (
-          <li key={track.id}>
-            {track.name} by{" "}
-            {track.artists.map((artist) => artist.name).join(", ")}
+          <li key={track.id} className="flex items-center p-3 bg-greyBg">
+            {/* Left Section */}
+            <div className="flex items-center space-x-4 flex-grow">
+              {/* Album Art */}
+              <img
+                src={track.album.images[1].url} // Use the medium-sized album art
+                alt={`${track.name} album art`}
+                className="w-16 h-16 rounded-md mr-0.5 md:mr-4"
+              />
+              <div className="flex flex-col flex-grow">
+                {/* Track Name */}
+                <span className="text-sm text-whiteColor font-semibold">
+                  {track.name}
+                </span>
+                {/* Artists */}
+                <span className="text-xs text-gray-500">
+                  {track.artists.map((artist) => (
+                    <React.Fragment key={artist.id}>
+                      <a
+                        href={artist.external_urls.spotify}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="hover:underline"
+                      >
+                        {artist.name}
+                      </a>
+                      {track.artists.length > 1 && ", "}
+                    </React.Fragment>
+                  ))}
+                </span>
+              </div>
+            </div>
+            {/* Right Section */}
+            <div className="flex items-center ml-auto space-x-4">
+              {/* Duration */}
+              <span className="text-xs text-gray-400">
+                {formatDuration(track.duration_ms)}
+              </span>
+              {/* Preview */}
+              {track.preview_url && (
+                <button
+                  className={`bg-spotifyGreen rounded-full p-2 ${
+                    playingTrackId === track.id ? "opacity-50" : ""
+                  }`}
+                  onClick={() =>
+                    handlePlayPause(track.id, track.preview_url || "")
+                  }
+                  title="Preview track"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="feather feather-play"
+                    width="16"
+                    height="16"
+                  >
+                    <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                  </svg>
+                </button>
+              )}
+            </div>
           </li>
         ))}
       </ul>
+
       <button
         onClick={handleCreatePlaylist}
-        className="bg-green-500 text-white p-2 rounded mt-4"
+        className="bg-spotifyGreen text-white p-2 rounded-full mt-4 absolute -bottom-8 right-4"
       >
         Create Playlist
       </button>
