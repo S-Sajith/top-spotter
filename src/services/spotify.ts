@@ -62,7 +62,7 @@ export const createPlaylist = async (userId: string, name: string, trackUris: st
   try {
     const playlistResponse = await axiosInstance.post(`/users/${userId}/playlists`, {
       name: name,
-      description: 'Playlist created by SpottyPlaylist',
+      description: 'Playlist created by TopSpotter',
       public: false,
     });
 
@@ -77,3 +77,4 @@ export const createPlaylist = async (userId: string, name: string, trackUris: st
     return Promise.reject(error);
   }
 };
+

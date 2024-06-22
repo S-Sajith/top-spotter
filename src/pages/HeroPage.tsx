@@ -2,7 +2,11 @@ const HeroPage = () => {
   const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize";
   const CLIENT_ID = "5f5e619c62b942069c1ce057f7df59df";
   const REDIRECT_URI = "http://localhost:5173/createPlaylists";
-  const SCOPES = ["user-top-read", "playlist-modify-public"];
+  const SCOPES = [
+    "user-top-read",
+    "playlist-modify-public",
+    "playlist-modify-private",
+  ];
 
   const handleLogin = () => {
     window.location.href = `${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&scope=${SCOPES.join(
