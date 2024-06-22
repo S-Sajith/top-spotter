@@ -9,17 +9,20 @@ const HeroPage = () => {
       "%20"
     )}&response_type=token&show_dialog=false`;
   };
+
   return (
-    <div className="flex justify-center items-center h-screen">
-      <div>
-        Login to discover your most played Spotify tracks, and save them
-        straight into a playlist.
+    <div className="flex flex-col justify-center items-center h-full text-center md:text-start">
+      <div className="font-semibold text-white text-3xl md:text-5xl mb-8 w-7/12 mt-[20vh] md:mt-[25vh]">
+        Login to discover your{" "}
+        <span className="text-spotifyGreen">most played</span>{" "}
+        <span className="text-spotifyGreen">Spotify </span>tracks, and save them
+        straight into a <span className="text-spotifyGreen">playlist</span>.
       </div>
       <button
         onClick={handleLogin}
-        className="bg-green-500 text-white p-4 rounded"
+        className="bg-spotifyGreen text-white p-4 rounded-full text-lg font-semibold md:self-start md:ml-[20vw]"
       >
-        Login
+        Connect to Spotify
       </button>
     </div>
   );

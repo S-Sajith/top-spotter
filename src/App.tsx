@@ -21,17 +21,20 @@ function App() {
       window.localStorage.setItem("spotify_access_token", token);
     }
   }, []);
+
   return (
-    <>
+    <div className="min-h-screen flex flex-col bg-customBg font-sans">
       <BrowserRouter>
         <AppBar />
-        <Routes>
-          <Route path="/" element={<HeroPage />} />
-          <Route path="/createPlaylists" element={<Dashboard />} />
-        </Routes>
+        <div className="flex-grow">
+          <Routes>
+            <Route path="/" element={<HeroPage />} />
+            <Route path="/createPlaylists" element={<Dashboard />} />
+          </Routes>
+        </div>
         <Footer />
       </BrowserRouter>
-    </>
+    </div>
   );
 }
 

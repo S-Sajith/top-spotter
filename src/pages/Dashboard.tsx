@@ -16,7 +16,10 @@ interface Track {
 const Dashboard: React.FC = () => {
   const navigate = useNavigate();
   useEffect(() => {
-    navigate("/createPlaylists");
+    const accessToken = localStorage.getItem("spotify_access_token");
+    if (accessToken) {
+      navigate("/createPlaylists");
+    }
   }, []);
   const [topTracks, setTopTracks] = useState<Track[]>([]);
   const [timeRange, setTimeRange] = useState("short_term");
@@ -53,7 +56,7 @@ const Dashboard: React.FC = () => {
   };
 
   return (
-    <div className="p-4">
+    <div className="p-4 h-full">
       <h1 className="text-2xl font-bold mb-4">Your Top Tracks</h1>
       <div className="mb-4">
         <select
