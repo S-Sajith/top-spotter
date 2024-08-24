@@ -26,7 +26,7 @@ const AppBar = () => {
       {location.pathname === "/createPlaylists" && isLoggedIn && (
         <button
           onClick={handleLogout}
-          className="ml-auto bg-spotifyGreen p-1 rounded cursor-pointer"
+          className="ml-auto bg-brandPurple p-1 rounded cursor-pointer"
           title="Logout"
         >
           <img src={logoutIcon} alt="Logout" className="h-4 w-4 " />

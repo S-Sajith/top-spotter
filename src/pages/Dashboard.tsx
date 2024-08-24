@@ -5,6 +5,7 @@ import {
   getUserProfile,
 } from "../services/spotify";
 import { useNavigate } from "react-router-dom";
+import spotifyIcon from "../assets/Spotify_Icon_CMYK_White.png";
 
 interface Track {
   id: string;
@@ -33,13 +34,21 @@ const Dashboard: React.FC = () => {
 
   useEffect(() => {
     const fetchUserProfile = async () => {
-      const profile = await getUserProfile();
-      setUserId(profile.id);
+      try {
+        const profile = await getUserProfile();
+        setUserId(profile.id);
+      } catch (error) {
+        alert("Failed to load user profile.");
+      }
     };
 
     const fetchTopTracks = async () => {
-      const tracks = await getUserTopTracks(timeRange);
-      setTopTracks(tracks);
+      try {
+        const tracks = await getUserTopTracks(timeRange);
+        setTopTracks(tracks);
+      } catch (error) {
+        alert("Failed to load top tracks.");
+      }
     };
 
     fetchUserProfile();
@@ -52,27 +61,29 @@ const Dashboard: React.FC = () => {
       return;
     }
 
-    const trackUris = topTracks.map((track) => track.uri);
-    const playlistId = await createPlaylist(
-      userId,
-      "My Top Tracks Playlist",
-      trackUris
-    );
-    alert(`Playlist created! ID: ${playlistId}`);
+    try {
+      const trackUris = topTracks.map((track) => track.uri);
+      const playlistId = await createPlaylist(
+        userId,
+        "My Top Tracks Playlist",
+        trackUris
+      );
+      alert(`Playlist created! ID: ${playlistId}`);
+    } catch (error) {
+      alert("Failed to create playlist.");
+    }
   };
 
   const [playingTrackId, setPlayingTrackId] = useState<string | null>(null);
   const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
 
   useEffect(() => {
-    // Initialize audio element
     if (!audio) {
       const newAudio = new Audio();
       setAudio(newAudio);
     }
 
     return () => {
-      // Clean up audio element on component unmount
       if (audio) {
         audio.pause();
         audio.src = "";
@@ -85,11 +96,9 @@ const Dashboard: React.FC = () => {
     if (!audio) return;
 
     if (playingTrackId === trackId) {
-      // Pause
       audio.pause();
       setPlayingTrackId(null);
     } else {
-      // Play
       audio.src = previewUrl;
       audio.play();
       setPlayingTrackId(trackId);
@@ -103,7 +112,7 @@ const Dashboard: React.FC = () => {
   }
 
   return (
-    <div className="p-4 relative h-full">
+    <div className="p-4 relative h-full" role="main">
       <div className="flex flex-col items-start mb-4 md:flex-row md:justify-between">
         <h1 className="text-2xl font-bold text-white">Your Top Tracks</h1>
         <div className="flex mt-3 md:mt-0">
@@ -111,8 +120,9 @@ const Dashboard: React.FC = () => {
             className="bg-greyBg text-white p-2 rounded-full mr-2 text-xs"
             onClick={() => setTimeRange("short_term")}
             style={{
-              backgroundColor: timeRange === "short_term" ? "#1db954" : "",
+              backgroundColor: timeRange === "short_term" ? "#7F00FF" : "",
             }}
+            aria-label="View top tracks from last month"
           >
             LAST MONTH
           </button>
@@ -120,8 +130,9 @@ const Dashboard: React.FC = () => {
             className="bg-greyBg text-white p-2 rounded-full mr-2 text-xs"
             onClick={() => setTimeRange("medium_term")}
             style={{
-              backgroundColor: timeRange === "medium_term" ? "#1db954" : "",
+              backgroundColor: timeRange === "medium_term" ? "#7F00FF" : "",
             }}
+            aria-label="View top tracks from last 6 months"
           >
             LAST 6 MONTHS
           </button>
@@ -129,8 +140,9 @@ const Dashboard: React.FC = () => {
             className="bg-greyBg text-white p-2 rounded-full text-xs"
             onClick={() => setTimeRange("long_term")}
             style={{
-              backgroundColor: timeRange === "long_term" ? "#1db954" : "",
+              backgroundColor: timeRange === "long_term" ? "#7F00FF" : "",
             }}
+            aria-label="View top tracks of all time"
           >
             ALL TIME
           </button>
@@ -139,41 +151,36 @@ const Dashboard: React.FC = () => {
       <ul
         className="max-h-[70vh] overflow-y-auto divide-y divide-gray-300"
         style={{ scrollbarWidth: "thin", msOverflowStyle: "none" }}
+        aria-live="polite"
       >
         <style>
           {`
             ul::-webkit-scrollbar {
-              width: 7px; /* Thinner width for webkit browsers */
+              width: 7px;
             }
-
             ul::-webkit-scrollbar-track {
-              background: #2d2d2d; /* Darker background color */
+              background: #2d2d2d;
             }
-
             ul::-webkit-scrollbar-thumb {
-              background-color: #555; /* Darker thumb color */
+              background-color: #555;
               border-radius: 10px;
-              border: 2px solid #2d2d2d; /* Matches track color */
+              border: 2px solid #2d2d2d;
             }
           `}
         </style>
         {topTracks.map((track) => (
           <li key={track.id} className="flex items-center p-3 bg-greyBg">
-            {/* Left Section */}
             <div className="flex items-center space-x-4 flex-grow">
-              {/* Album Art */}
               <img
-                src={track.album.images[1].url} // Use the medium-sized album art
+                src={track.album.images[1].url}
                 alt={`${track.name} album art`}
                 className="w-16 h-16 rounded-md mr-0.5 md:mr-4"
               />
               <div className="flex flex-col flex-grow">
-                {/* Track Name */}
-                <span className="text-sm text-whiteColor font-semibold">
+                <span className="text-sm text-whiteColor font-semibold mb-1">
                   {track.name}
                 </span>
-                {/* Artists */}
-                <span className="text-xs text-gray-500">
+                <span className="text-xs text-gray-500 mb-1">
                   {track.artists.map((artist) => (
                     <React.Fragment key={artist.id}>
                       <a
@@ -188,39 +195,78 @@ const Dashboard: React.FC = () => {
                     </React.Fragment>
                   ))}
                 </span>
+                <a
+                  href={`https://open.spotify.com/track/${track.id}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-whiteColor hover:underline text-xs"
+                  aria-label={`Listen to ${track.name} on Spotify`}
+                >
+                  <img
+                    src={spotifyIcon}
+                    alt="Spotify logo"
+                    className="inline-block w-4 h-4 mr-1"
+                    style={{ width: "21px", height: "21px" }}
+                  />
+                  Listen on Spotify
+                </a>
               </div>
             </div>
-            {/* Right Section */}
             <div className="flex items-center ml-auto space-x-4">
-              {/* Duration */}
               <span className="text-xs text-gray-400">
                 {formatDuration(track.duration_ms)}
               </span>
-              {/* Preview */}
               {track.preview_url && (
                 <button
-                  className={`bg-spotifyGreen rounded-full p-2 ${
+                  className={`bg-brandPurple rounded-full p-2 ${
                     playingTrackId === track.id ? "opacity-50" : ""
                   }`}
                   onClick={() =>
                     handlePlayPause(track.id, track.preview_url || "")
                   }
-                  title="Preview track"
+                  title={
+                    playingTrackId === track.id
+                      ? "Pause preview"
+                      : "Play preview"
+                  }
+                  aria-label={
+                    playingTrackId === track.id
+                      ? `Pause preview of ${track.name}`
+                      : `Play preview of ${track.name}`
+                  }
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="feather feather-play"
-                    width="16"
-                    height="16"
-                  >
-                    <polygon points="5 3 19 12 5 21 5 3"></polygon>
-                  </svg>
+                  {playingTrackId === track.id ? (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="feather feather-pause"
+                      width="16"
+                      height="16"
+                    >
+                      <rect x="6" y="4" width="4" height="16"></rect>
+                      <rect x="14" y="4" width="4" height="16"></rect>
+                    </svg>
+                  ) : (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="feather feather-play"
+                      width="16"
+                      height="16"
+                    >
+                      <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                    </svg>
+                  )}
                 </button>
               )}
             </div>
@@ -230,7 +276,8 @@ const Dashboard: React.FC = () => {
 
       <button
         onClick={handleCreatePlaylist}
-        className="bg-spotifyGreen text-white p-2 rounded-full mt-4 absolute -bottom-8 right-4"
+        className="bg-brandPurple text-white p-2 rounded-full mt-4 absolute -bottom-8 right-4"
+        aria-label="Create a playlist with your top tracks"
       >
         Create Playlist
       </button>

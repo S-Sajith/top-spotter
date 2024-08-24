@@ -11,7 +11,7 @@ export default {
       },
       colors: {
         customBg: '#282c34',
-        spotifyGreen: '#1db954',
+        brandPurple: '#7F00FF',
         whiteColor: '#fdfdfd',
         greyBg: '#212327'
       },

@@ -18,13 +18,13 @@ const HeroPage = () => {
     <div className="flex flex-col justify-center items-center h-full text-center md:text-start">
       <div className="font-semibold text-white text-3xl md:text-5xl mb-8 w-7/12 mt-[20vh] md:mt-[25vh]">
         Login to discover your{" "}
-        <span className="text-spotifyGreen">most played</span>{" "}
-        <span className="text-spotifyGreen">Spotify </span>tracks, and save them
-        straight into a <span className="text-spotifyGreen">playlist</span>.
+        <span className="text-brandPurple">most played</span>{" "}
+        <span className="text-brandPurple">Spotify </span>tracks, and save them
+        straight into a <span className="text-brandPurple">playlist</span>.
       </div>
       <button
         onClick={handleLogin}
-        className="bg-spotifyGreen text-white p-4 rounded-full text-lg font-semibold md:self-start md:ml-[20vw]"
+        className="bg-brandPurple text-white p-4 rounded-full text-lg font-semibold md:self-start md:ml-[20vw]"
       >
         Connect to Spotify
       </button>
