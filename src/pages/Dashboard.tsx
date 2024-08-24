@@ -174,7 +174,7 @@ const Dashboard: React.FC = () => {
               <img
                 src={track.album.images[1].url}
                 alt={`${track.name} album art`}
-                className="w-16 h-16 rounded-md mr-0.5 md:mr-4"
+                className="w-16 h-16 mr-0.5 md:mr-4"
               />
               <div className="flex flex-col flex-grow">
                 <span className="text-sm text-whiteColor font-semibold mb-1">
