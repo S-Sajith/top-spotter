@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import logo from "../assets/topspotter-high-res-logo-transparent.png";
+import logo from "../assets/Logo.png";
 import logoutIcon from "../assets/logout-icon.svg";
 
 const AppBar = () => {
@@ -21,7 +21,7 @@ const AppBar = () => {
   return (
     <div className="bg-greyBg text-white p-3 flex items-center justify-between">
       <Link to="/">
-        <img src={logo} alt="TopSpotter Logo" className="h-8" />
+        <img src={logo} alt="TopTrax Logo" className="h-8" />
       </Link>
       {location.pathname === "/createPlaylists" && isLoggedIn && (
         <button

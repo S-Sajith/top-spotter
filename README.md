@@ -1,14 +1,14 @@
-# TopSpotter
+# TopTrax
 
-[![TopSpotter Logo](Logo.png)](https://top-spotter.netlify.app/)
+[![TopTrax Logo](Logo.png)](https://top-trax.netlify.app/)
 
-**TopSpotter** is a single-page application built with React that leverages Spotify’s RESTful API, enabling users to explore their most frequently played tracks over various time periods and create playlists.
+**TopTrax** is a single-page application built with React that leverages Spotify’s RESTful API, enabling users to explore their most frequently played tracks over various time periods and create playlists.
 
 ## Getting Started
 
 ### Live Demo
 
-Check out the live version of the app [here](https://top-spotter.netlify.app/).
+Check out the live version of the app [here](https://top-trax.netlify.app/).
 
 ### Installation
 
