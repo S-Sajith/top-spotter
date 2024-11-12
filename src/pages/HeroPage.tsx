@@ -2,9 +2,9 @@ import SpotifyLogo from "../assets/Spotify_Logo_CMYK_White.png";
 import spotifyIcon from "../assets/Spotify_Icon_CMYK_White.png";
 
 const HeroPage = () => {
-  const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize";
-  const CLIENT_ID = "5f5e619c62b942069c1ce057f7df59df";
-  const REDIRECT_URI = "https://top-trax.netlify.app/createPlaylists";
+  const AUTH_ENDPOINT = import.meta.env.VITE_AUTH_ENDPOINT;
+  const CLIENT_ID = import.meta.env.VITE_CLIENT_ID;
+  const REDIRECT_URI = import.meta.env.VITE_REDIRECT_URL;
   const SCOPES = [
     "user-top-read",
     "playlist-modify-public",
