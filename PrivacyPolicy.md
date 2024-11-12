@@ -8,14 +8,14 @@ Thank you for using TopTrax. This Privacy Policy explains how we collect, use, a
 
 We only collect information necessary to provide and improve our service. This includes:
 
-- **Spotify User Data**: When you log in through Spotify, we collect information about your Spotify profile, such as your top tracks and playlists.
+- **Spotify User Data**: When you log in through Spotify, we collect information about your top played tracks from your Spotify profile.
 - **Local Storage Data**: We store your Spotify access token locally on your device to authenticate your session.
 
 #### **2. How We Use Your Information**
 
 The information collected is used to:
 
-- Access your top tracks and playlists on Spotify.
+- Access your top played tracks on Spotify.
 - Allow you to create playlists within the app.
 
 We do not share your data with third parties, and we will not use your data for any other purposes beyond those stated here.
@@ -29,7 +29,7 @@ Your data is stored securely, and we only keep the Spotify access token locally 
 You have the right to:
 
 - Remove access to your data by logging out of the app. Upon logging out, all access tokens and session data will be removed from your device.
-- Disconnect your Spotify account from the app at any time, ensuring that no further data is accessed or stored.
+- Logout from your Spotify account on your browser, which means that you would have to login again to allow the top trax application access to your Spotify data.
 
 #### **5. Changes to this Privacy Policy**
 
