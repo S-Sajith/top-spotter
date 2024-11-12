@@ -16,6 +16,7 @@ const AppBar = () => {
   const handleLogout = () => {
     localStorage.removeItem("spotify_access_token");
     navigate("/");
+    setIsLoggedIn(false);
   };
 
   return (
